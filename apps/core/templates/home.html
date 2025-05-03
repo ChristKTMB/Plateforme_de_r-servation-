@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Bienvenue sur SportTicket</h1>
+            <p class="lead mb-4">Réservez vos billets pour les meilleurs événements sportifs</p>
+            <div class="mb-5">
+                <a href="#" class="btn btn-primary btn-lg mx-2">Voir les événements</a>
+                <a href="#" class="btn btn-outline-primary btn-lg mx-2">Comment ça marche ?</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-ticket-alt fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Réservation Simple</h3>
+                    <p class="card-text">Réservez vos billets en quelques clics</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-alt fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Événements Variés</h3>
+                    <p class="card-text">Football, Basketball, Tennis et plus encore</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Paiement Sécurisé</h3>
+                    <p class="card-text">Transactions 100% sécurisées</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
