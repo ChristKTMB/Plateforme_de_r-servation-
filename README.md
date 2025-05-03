@@ -60,10 +60,9 @@
    ```bash
    git checkout -b develop/daniel
    ```  
-2. **On se montre nos avancées** 2x/semaine en visio (15 min max).  
+2. **On se montre nos avancées** Pour évaluer le temps qu'il nous restera à finir
 3. **Quand une partie est finie** :  
-   - Faire une Pull Request sur GitHub  
-   - 2 autres doivent valider avant de merger  
+   - Faire une Pull Request sur GitHub 
 
 ### 📅 **Échéances suggérées**  
 - **Jour 1** : Page d'accueil + système de comptes  
