@@ -1,6 +1,5 @@
 from django.db import models
 
-from django.db import models
 from apps.users.models import User
 from apps.events.models import Event, TicketType
 from apps.core.models import TimeStampedModel
