@@ -2,43 +2,69 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h1 class="display-4 mb-4">Bienvenue sur SportTicket</h1>
-            <p class="lead mb-4">Réservez vos billets pour les meilleurs événements sportifs</p>
-            <div class="mb-5">
-                <a href="#" class="btn btn-primary btn-lg mx-2">Voir les événements</a>
-                <a href="#" class="btn btn-outline-primary btn-lg mx-2">Comment ça marche ?</a>
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5 mb-5" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), center/cover;">
+    <div class="container py-5">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-3 fw-bold mb-4">Bienvenue sur SportTicket</h1>
+                <p class="lead mb-5">Réservez vos billets pour les meilleurs événements sportifs</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#" class="btn btn-light btn-lg">
+                        <i class="fas fa-ticket-alt me-2"></i>Voir les événements
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Comment ça marche ?
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row mt-5">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-ticket-alt fa-3x mb-3 text-primary"></i>
-                    <h3 class="card-title">Réservation Simple</h3>
-                    <p class="card-text">Réservez vos billets en quelques clics</p>
+<!-- Features Section -->
+<div class="container mb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Pourquoi choisir SportTicket ?</h2>
+        <hr class="mx-auto" style="width: 50px; border-width: 3px;">
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-ticket-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Réservation Simple</h3>
+                    <p class="text-muted">Réservez vos billets en quelques clics et recevez-les instantanément par email</p>
+                    <a href="#" class="text-decoration-none">En savoir plus <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-calendar-alt fa-3x mb-3 text-primary"></i>
-                    <h3 class="card-title">Événements Variés</h3>
-                    <p class="card-text">Football, Basketball, Tennis et plus encore</p>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-calendar-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Événements Variés</h3>
+                    <p class="text-muted">Football, Basketball, Tennis et bien d'autres sports dans les meilleurs stades</p>
+                    <a href="#" class="text-decoration-none">Découvrir <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
-                    <h3 class="card-title">Paiement Sécurisé</h3>
-                    <p class="card-text">Transactions 100% sécurisées</p>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+                <div class="card-body text-center p-4">
+                    <div class="bg-light rounded-circle mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Paiement Sécurisé</h3>
+                    <p class="text-muted">Transactions 100% sécurisées et remboursement garanti en cas d'annulation</p>
+                    <a href="#" class="text-decoration-none">Garanties <i class="fas fa-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </div>

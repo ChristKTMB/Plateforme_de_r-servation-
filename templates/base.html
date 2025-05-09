@@ -3,20 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportTicket</title>
+    <title>SportTicket | Réservation d'événements sportifs</title>
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        main {
+            min-height: calc(100vh - 180px);
+            padding: 2rem 0;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">SportTicket</a>
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <i class="fas fa-ticket-alt me-2"></i>
+                SportTicket
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-1"></i> Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-calendar-alt me-1"></i> Événements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user me-1"></i> Mon Compte</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    {% block content %}
-    {% endblock %}
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-dark mb-3">SportTicket</h5>
+                    <p class="text-muted">Votre plateforme de réservation d'événements sportifs en ligne.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-dark mb-3">Liens Utiles</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted text-decoration-none">À propos</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Conditions d'utilisation</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-dark mb-3">Suivez-nous</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-muted"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center text-muted">
+                <small>&copy; {% now 'Y' %} SportTicket. Tous droits réservés.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
