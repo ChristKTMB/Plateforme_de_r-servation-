@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Créer un événement</h2>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Event Form -->
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {% if field.name == 'categories' %}
+                                    <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control" multiple>
+                                        {% for choice in field.field.choices %}
+                                            <option value="{{ choice.0 }}" 
+                                                    {% if choice.1|lower == 'sport' %}selected{% endif %}>
+                                                {{ choice.1 }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                                
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Ticket Types -->
+                        <h4 class="mt-4 mb-3">Types de billets</h4>
+                        {{ formset.management_form }}
+                        <div id="ticket-types">
+                            {% for ticket_form in formset %}
+                                <div class="ticket-type-form card mb-3 p-3">
+                                    {{ ticket_form.as_p }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" id="add-ticket-type">
+                            Ajouter un type de billet
+                        </button>
+
+                        <button type="submit" class="btn btn-primary w-100">Créer l'événement</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('add-ticket-type').addEventListener('click', function() {
+    const formCount = document.querySelector('#id_tickettype_set-TOTAL_FORMS');
+    const ticketTypeContainer = document.getElementById('ticket-types');
+    const emptyForm = document.querySelector('.ticket-type-form').cloneNode(true);
+    
+    // Update form index
+    const newIndex = parseInt(formCount.value);
+    emptyForm.innerHTML = emptyForm.innerHTML.replace(/-0-/g, `-${newIndex}-`);
+    
+    ticketTypeContainer.appendChild(emptyForm);
+    formCount.value = newIndex + 1;
+});
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <!-- Image de l'événement -->
+        <div class="col-md-6 mb-4">
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded shadow">
+            {% else %}
+                <div class="bg-secondary text-white p-5 rounded text-center">
+                    <i class="fas fa-image fa-3x"></i>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Informations de l'événement -->
+        <div class="col-md-6">
+            <h1 class="mb-4">{{ event.title }}</h1>
+            
+            <div class="mb-4">
+                <p class="text-muted mb-2">
+                    <i class="fas fa-calendar me-2"></i>
+                    {{ event.date|date:"l d F Y à H:i" }}
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    {{ event.location }}
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-user me-2"></i>
+                    Organisé par {{ event.organizer.get_full_name|default:event.organizer.username }}
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h4>Description</h4>
+                <p>{{ event.description|linebreaks }}</p>
+            </div>
+
+            <!-- Types de billets -->
+            <div class="mb-4">
+                <h4>Billets disponibles</h4>
+                {% for ticket_type in ticket_types %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title mb-1">{{ ticket_type.name }}</h5>
+                                    <p class="card-text text-muted mb-0">
+                                        {{ ticket_type.quantity_available }} places disponibles
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="mb-2">{{ ticket_type.price }} €</h5>
+                                    <a href="#" class="btn btn-primary btn-sm">
+                                        Réserver
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-warning">
+                        Aucun billet disponible pour le moment.
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Catégories -->
+            <div class="mb-4">
+                <h4>Catégories</h4>
+                {% for category in event.categories.all %}
+                    <span class="badge bg-secondary me-2">{{ category.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
