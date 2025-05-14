@@ -7,7 +7,8 @@ class User(AbstractUser):
     """Utilisateurs personalisé"""
     USER_TYPE_CHOICES = (
         ("C", "Client"),
-        ("O", "Organisateur")
+        ("O", "Organisateur"),
+        ("A", "Administrateur"),
     )
     user_type = models.CharField(max_length=1, choices=USER_TYPE_CHOICES, default="C")
     phone = models.CharField(max_length=20, blank=True)

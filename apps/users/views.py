@@ -19,7 +19,7 @@ def register(request):
             )
             login(request, user)
             messages.success(request, 'Compte créé avec succès!')
-            return redirect('home')
+            return redirect('login')
     else:
         form = UserRegistrationForm()
     
@@ -46,4 +46,4 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'Vous êtes déconnecté.')
-    return redirect('home')
+    return redirect('login')
