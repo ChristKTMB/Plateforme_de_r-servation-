@@ -3,6 +3,7 @@ from django.db import models
 from apps.users.models import User
 from apps.events.models import Event, TicketType
 from apps.core.models import TimeStampedModel
+from django.utils.crypto import get_random_string
 
 class Reservation(TimeStampedModel):
     """Réservation utilisateur"""
@@ -13,6 +14,11 @@ class Reservation(TimeStampedModel):
 
     def __str__(self):
         return f"Réservation {self.reference}"
+    
+    def save(self, *args, **kwargs):
+        if not self.reference:
+            self.reference = "RES-" + get_random_string(6).upper()
+        super().save(*args, **kwargs)
 
 class ReservationItem(models.Model):
     """Détails des billets réservés"""
