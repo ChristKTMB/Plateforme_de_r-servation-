@@ -15,3 +15,10 @@ class UserRegistrationForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150, label="Nom d'utilisateur")
     password = forms.CharField(widget=forms.PasswordInput, label="Mot de passe")
+
+    class Meta:
+        fields = ('username', 'password')
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom d\'utilisateur'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Mot de passe'}),
+        }
