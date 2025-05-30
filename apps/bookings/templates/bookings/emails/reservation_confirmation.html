@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background-color: #007bff; color: white; padding: 20px; }
+        .content { padding: 20px; }
+        .ticket-info { background-color: #f8f9fa; padding: 15px; margin: 15px 0; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { padding: 10px; border-bottom: 1px solid #dee2e6; }
+        .table th { background-color: #007bff; color: white; }
+        .total { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Confirmation de Réservation</h1>
+        </div>
+        <div class="content">
+            <div class="ticket-info">
+                <h2>{{ reservation.event.title }}</h2>
+                <p><strong>Date :</strong> {{ reservation.event.date|date:"d/m/Y H:i" }}</p>
+                <p><strong>Lieu :</strong> {{ reservation.event.location }}</p>
+                <p><strong>Référence :</strong> {{ reservation.reference }}</p>
+            </div>
+
+            <h3>Vos billets</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in reservation.items.all %}
+                    <tr>
+                        <td>{{ item.ticket_type.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.total_price }} €</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total">
+                        <td colspan="2">Total</td>
+                        <td>{{ reservation.total_amount }} €</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

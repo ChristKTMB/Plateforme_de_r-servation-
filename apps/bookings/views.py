@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -14,6 +15,7 @@ from apps.events.models import Event
 from .models import Reservation, ReservationItem
 from .serializers import ReservationSerializer, ReservationItemSerializer
 from .forms import ReservationForm, get_reservation_item_formset
+from .services import send_reservation_confirmation
 
 # Vues pour les templates
 class ReservationListView(LoginRequiredMixin, ListView):
@@ -79,7 +81,16 @@ class ReservationConfirmView(LoginRequiredMixin, DetailView):
         reservation = self.get_object()
         try:
             reservation.confirm()
-            messages.success(request, 'Réservation confirmée avec succès!')
+            if send_reservation_confirmation(reservation):
+                messages.success(
+                    request, 
+                    'Réservation confirmée avec succès! Un email de confirmation vous a été envoyé.'
+                )
+            else:
+                messages.warning(
+                    request,
+                    'Réservation confirmée mais l\'email n\'a pas pu être envoyé.'
+                )
             return redirect('bookings:reservation_detail', pk=reservation.pk)
         except ValidationError as e:
             messages.error(request, str(e))
