@@ -11,13 +11,15 @@ class ReservationForm(forms.ModelForm):
 
 class ReservationItemForm(forms.ModelForm):
     """Formulaire pour les éléments de réservation"""
+    ticket_type = forms.ModelChoiceField(
+        queryset=TicketType.objects.none(),
+        widget=forms.HiddenInput()
+    )
+    
     class Meta:
         model = ReservationItem
         fields = ['ticket_type', 'quantity']
         widgets = {
-            'ticket_type': forms.Select(attrs={
-                'class': 'form-control'
-            }),
             'quantity': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': '1'

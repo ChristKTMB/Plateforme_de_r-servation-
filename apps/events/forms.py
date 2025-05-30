@@ -37,13 +37,20 @@ class EventForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if self.isinstance and self.instance.pk:
+        total_tickets = cleaned_data.get('total_tickets')
+        
+        # Skip validation if total_tickets is not provided
+        if not total_tickets:
+            return cleaned_data
+            
+        # If we're updating an existing event
+        if self.instance and self.instance.pk:
             total_capacity = sum(type.quantity_available for type in self.instance.ticket_types.all())
-            total_tickets = cleaned_data.get('total_tickets')
-            if total_tickets and total_capacity < total_tickets:
+            if total_capacity > total_tickets:
                 raise ValidationError({
-                'total_tickets': "La somme des billets disponibles dépasse la capacité totale"
-            })
+                    'total_tickets': "La somme des billets disponibles dépasse la capacité totale"
+                })
+        
         return cleaned_data
 
     def clean_date(self):
@@ -60,7 +67,9 @@ class EventForm(forms.ModelForm):
 
     def clean_total_tickets(self):
         total_tickets = self.cleaned_data.get('total_tickets')
-        if total_tickets and total_tickets <= 0:
+        if total_tickets is None:
+            raise ValidationError("Le nombre de billets est requis")
+        if total_tickets <= 0:
             raise ValidationError("Le nombre de billets doit être supérieur à 0")
         return total_tickets
 

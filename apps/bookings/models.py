@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
+from django.utils.translation import gettext_lazy as _
 
 from apps.users.models import User
 from apps.events.models import Event, TicketType
@@ -40,18 +41,36 @@ class Reservation(TimeStampedModel):
 class ReservationItem(models.Model):
     """Détails des billets réservés"""
     reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, related_name='items')
-    ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
+    ticket_type = models.ForeignKey(TicketType, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.quantity}x {self.ticket_type.name}"
 
     def clean(self):
-        if self.quantity > self.ticket_type.quantity_available:
-            raise ValidationError(
-                f"Il ne reste que {self.ticket_type.quantity_available} billets disponibles"
-            )
-    
+        if not self.ticket_type:
+            raise ValidationError({
+                'ticket_type': _("Le type de billet est requis.")
+            })
+        
+        if not self.quantity:
+            raise ValidationError({
+                'quantity': _("La quantité est requise.")
+            })
+
+        if self.ticket_type and self.quantity:
+            if self.quantity > self.ticket_type.quantity_available:
+                raise ValidationError({
+                    'quantity': _(
+                        f"Il ne reste que {self.ticket_type.quantity_available} "
+                        f"billets disponibles pour {self.ticket_type.name}"
+                    )
+                })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     @property
     def total_price(self):
-        return self.ticket_type.price * self.quantity
+        return self.ticket_type.price * self.quantity if self.ticket_type and self.quantity else 0

@@ -62,9 +62,9 @@
                                     </p>
                                 </div>
                                 <div class="text-end">
-                                    <h5 class="mb-2">{{ ticket_type.price }} €</h5>
+                                    <h5 class="mb-2">{{ ticket_type.price }} $</h5>
                                     {% if user.is_authenticated %}
-                                        <a href="{% url 'bookings:reservation_create' event.id %}" 
+                                        <a href="{% url 'bookings:reservation_create' event.id %}?ticket_type={{ ticket_type.id }}" 
                                            class="btn btn-primary btn-sm">
                                             <i class="fas fa-ticket-alt me-1"></i>
                                             Réserver

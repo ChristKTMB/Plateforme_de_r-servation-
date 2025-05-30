@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from apps.events.models import Event
+from apps.events.models import Event, TicketType
 from .models import Reservation, ReservationItem
 from .serializers import ReservationSerializer, ReservationItemSerializer
 from .forms import ReservationForm, get_reservation_item_formset
@@ -42,26 +42,40 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Récupération de l'événement
         event = get_object_or_404(Event, pk=self.kwargs['event_id'])
+        context['event'] = event
+        
+        # Récupération du type de billet
+        ticket_type_id = self.request.GET.get('ticket_type')
+        if not ticket_type_id:
+            messages.error(self.request, "Veuillez sélectionner un type de billet")
+            return redirect('events:event_detail', pk=event.pk)
+            
+        ticket_type = get_object_or_404(TicketType, id=ticket_type_id, event=event)
+        context['ticket_type'] = ticket_type
+        
+        # Configuration du formset
         formset_class = get_reservation_item_formset(event=event)
         
         if self.request.POST:
             context['formset'] = formset_class(self.request.POST)
         else:
-            context['formset'] = formset_class()
+            # Pré-remplissage du formset avec le ticket sélectionné
+            initial = [{'ticket_type': ticket_type, 'quantity': 1}]
+            context['formset'] = formset_class(initial=initial)
         
-        context['event'] = event
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-        event = context['event']
         
         if formset.is_valid():
             self.object = form.save(commit=False)
             self.object.user = self.request.user
-            self.object.event = event
+            self.object.event = context['event']
             self.object.save()
             
             formset.instance = self.object

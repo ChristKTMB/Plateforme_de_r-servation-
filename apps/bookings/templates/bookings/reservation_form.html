@@ -3,6 +3,12 @@
 {% block content %}
 <div class="container py-4">
     <h2 class="mb-4">Réserver pour {{ event.title }}</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Type de billet sélectionné : {{ ticket_type.name }}</h5>
+            <p class="mb-0">Prix unitaire : {{ ticket_type.price }} $</p>
+        </div>
+    </div>
 
     <form method="post" class="card shadow-sm">
         {% csrf_token %}
@@ -15,28 +21,18 @@
 
             {{ formset.management_form }}
             
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h4>Sélection des billets</h4>
-                    {% for form in formset %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                {% for field in form.visible_fields %}
-                                    <div class="mb-3">
-                                        {{ field.label_tag }}
-                                        {{ field }}
-                                        {% if field.errors %}
-                                            <div class="invalid-feedback d-block">
-                                                {{ field.errors.0 }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
+            {% for form in formset %}
+                {{ form.ticket_type }}
+                <div class="mb-3">
+                    <label class="form-label">Quantité</label>
+                    {{ form.quantity }}
+                    {% if form.quantity.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.quantity.errors.0 }}
                         </div>
-                    {% endfor %}
+                    {% endif %}
                 </div>
-            </div>
+            {% endfor %}
 
             <div class="text-end">
                 <a href="{% url 'events:event_detail' event.pk %}" 
