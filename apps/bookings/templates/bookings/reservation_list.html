@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Mes Réservations</h2>
+    
+    {% if reservations %}
+        <div class="row">
+            {% for reservation in reservations %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ reservation.event.title }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-2"></i>
+                                    {{ reservation.event.date|date:"d/m/Y H:i" }}
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <strong>Référence :</strong> {{ reservation.reference }}<br>
+                                <strong>Statut :</strong> 
+                                {% if reservation.is_confirmed %}
+                                    <span class="badge bg-success">Confirmée</span>
+                                {% else %}
+                                    <span class="badge bg-warning">En attente</span>
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'bookings:reservation_detail' reservation.pk %}" 
+                               class="btn btn-primary">
+                                Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Vous n'avez pas encore de réservations.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('apps.core.urls')),
     path('users/', include('apps.users.urls')),
     path('events/', include('apps.events.urls')),
-    path('', include('apps.bookings.urls')),
+    path('bookings/', include('apps.bookings.urls')),
 
     path('api-auth/', include('rest_framework.urls'))
 ]

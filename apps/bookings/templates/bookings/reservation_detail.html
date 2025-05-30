@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">{{ reservation.event.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Détails de la réservation</h4>
+                    <p>
+                        <strong>Référence :</strong> {{ reservation.reference }}<br>
+                        <strong>Date de réservation :</strong> {{ reservation.created|date:"d/m/Y H:i" }}<br>
+                        <strong>Statut :</strong> 
+                        {% if reservation.is_confirmed %}
+                            <span class="badge bg-success">Confirmée</span>
+                        {% else %}
+                            <span class="badge bg-warning">En attente</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Billets réservés</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Quantité</th>
+                                <th>Prix unitaire</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in reservation.items.all %}
+                                <tr>
+                                    <td>{{ item.ticket_type.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.ticket_type.price }} €</td>
+                                    <td>{{ item.total_price }} €</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th>{{ reservation.total_amount }} €</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            {% if not reservation.is_confirmed %}
+                <div class="mt-4">
+                    <form method="post" action="{% url 'bookings:reservation_confirm' reservation.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check me-2"></i>Confirmer la réservation
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

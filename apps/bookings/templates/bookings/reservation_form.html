@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">Réserver pour {{ event.title }}</h2>
+
+    <form method="post" class="card shadow-sm">
+        {% csrf_token %}
+        <div class="card-body">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Veuillez corriger les erreurs ci-dessous.
+                </div>
+            {% endif %}
+
+            {{ formset.management_form }}
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h4>Sélection des billets</h4>
+                    {% for form in formset %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {% for field in form.visible_fields %}
+                                    <div class="mb-3">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ field.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a href="{% url 'events:event_detail' event.pk %}" 
+                   class="btn btn-secondary me-2">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-ticket-alt me-2"></i>Réserver
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
