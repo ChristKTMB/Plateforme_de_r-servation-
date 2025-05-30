@@ -11,7 +11,7 @@ from .forms import UserRegistrationForm, LoginForm
 
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
-# from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
@@ -21,7 +21,7 @@ from .forms import UserRegistrationForm
 
 class RegisterView(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    # permission_classes = [AllowAny]
+    permission_classes = [AllowAny]
     template_name = 'users/register.html'
 
     def get(self, request):
@@ -84,6 +84,10 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
+        if request.accepted_renderer.format == 'html':
+            logout(request)
+            return redirect('login')
         logout(request)
         return Response({'status': 'success', 'message': 'Déconnexion réussie'}, status=status.HTTP_200_OK)

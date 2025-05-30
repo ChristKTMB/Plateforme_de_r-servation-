@@ -35,6 +35,17 @@ class EventForm(forms.ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.isinstance and self.instance.pk:
+            total_capacity = sum(type.quantity_available for type in self.instance.ticket_types.all())
+            total_tickets = cleaned_data.get('total_tickets')
+            if total_tickets and total_capacity < total_tickets:
+                raise ValidationError({
+                'total_tickets': "La somme des billets disponibles dépasse la capacité totale"
+            })
+        return cleaned_data
+
     def clean_date(self):
         date = self.cleaned_data.get('date')
         if date and date < timezone.now():
