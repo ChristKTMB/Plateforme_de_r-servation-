@@ -13,5 +13,7 @@ urlpatterns = [
     path('api/login/', views.LoginView.as_view(), name='login'),
     path('api/logout/', views.logoutview, name='logout'),
 
+    path('profile/', views.UserViewSet.as_view({'get': 'profile'}), name='profile'),
+
     path('', include(router.urls))
 ]
