@@ -3,12 +3,12 @@
 {% block content %}
 <div class="container py-4">
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
     {% endif %}
 
     <div class="card shadow-sm mb-4">
@@ -22,11 +22,11 @@
                     <p>
                         <strong>Référence :</strong> {{ reservation.reference }}<br>
                         <strong>Date de réservation :</strong> {{ reservation.created|date:"d/m/Y H:i" }}<br>
-                        <strong>Statut :</strong> 
+                        <strong>Statut :</strong>
                         {% if reservation.is_confirmed %}
-                            <span class="badge bg-success">Confirmée</span>
+                        <span class="badge bg-success">Confirmée</span>
                         {% else %}
-                            <span class="badge bg-warning">En attente</span>
+                        <span class="badge bg-warning">En attente</span>
                         {% endif %}
                     </p>
                 </div>
@@ -43,12 +43,12 @@
                         </thead>
                         <tbody>
                             {% for item in reservation.items.all %}
-                                <tr>
-                                    <td>{{ item.ticket_type.name }}</td>
-                                    <td>{{ item.quantity }}</td>
-                                    <td>{{ item.ticket_type.price }} €</td>
-                                    <td>{{ item.total_price }} €</td>
-                                </tr>
+                            <tr>
+                                <td>{{ item.ticket_type.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.ticket_type.price }} €</td>
+                                <td>{{ item.total_price }} €</td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                         <tfoot>
@@ -62,15 +62,41 @@
             </div>
 
             {% if not reservation.is_confirmed %}
-                <div class="mt-4">
-                    <form method="post" action="{% url 'bookings:reservation_confirm' reservation.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-check me-2"></i>Confirmer la réservation
-                        </button>
-                    </form>
-                </div>
+            <div class="mt-4">
+                <h4>Informations de paiement (simulation)</h4>
+                <form method="post" action="{% url 'bookings:reservation_confirm' reservation.pk %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="card_name" class="form-label">Nom sur la carte</label>
+                        <input type="text" name="card_name" id="card_name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="card_number" class="form-label">Numéro de carte</label>
+                        <input type="text" name="card_number" id="card_number" class="form-control"
+                            placeholder="1234 5678 9012 3456" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="expiry_date" class="form-label">Date d'expiration</label>
+                            <input type="text" name="expiry_date" id="expiry_date" class="form-control"
+                                placeholder="MM/AA" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" name="cvv" id="cvv" class="form-control" placeholder="123" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>Confirmer le paiement
+                    </button>
+                </form>
+            </div>
             {% endif %}
+
         </div>
     </div>
 </div>
