@@ -142,3 +142,34 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'login':
             return ['users/login.html']
         return super().get_template_names()
+    
+    
+
+# views.py
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from .serializers import PublicUserCreateSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class RegisterClientView(generics.CreateAPIView):
+    serializer_class = PublicUserCreateSerializer
+    permission_classes = [AllowAny]
+
+    def get_serializer_context(self):
+        return {'user_type': 'C'}
+
+class RegisterOrganisateurView(generics.CreateAPIView):
+    serializer_class = PublicUserCreateSerializer
+    permission_classes = [AllowAny]
+
+    def get_serializer_context(self):
+        return {'user_type': 'O'}
+
+class RegisterAdminView(generics.CreateAPIView):
+    serializer_class = PublicUserCreateSerializer
+    permission_classes = [AllowAny]  # Peut être changé en IsAdminUser
+
+    def get_serializer_context(self):
+        return {'user_type': 'A'}

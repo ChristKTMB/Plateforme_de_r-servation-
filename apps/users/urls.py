@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from .views import RegisterClientView, RegisterOrganisateurView, RegisterAdminView
 
 from rest_framework.routers import DefaultRouter
 
@@ -15,5 +16,10 @@ urlpatterns = [
 
     path('profile/', views.UserViewSet.as_view({'get': 'profile'}), name='profile'),
 
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    
+    
+    path('register/client/', RegisterClientView.as_view(), name='register-client'),
+    path('register/organisateur/', RegisterOrganisateurView.as_view(), name='register-organisateur'),
+    path('register/admin/', RegisterAdminView.as_view(), name='register-admin'),
 ]
