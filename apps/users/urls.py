@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import RegisterClientView, RegisterOrganisateurView, RegisterAdminView, UserProfileView, UserDetailView, ChangePasswordView
+from .views import RegisterClientView, RegisterOrganisateurView, RegisterAdminView, UserProfileAPIView, UserDetailView, ChangePasswordView
 
 from rest_framework.routers import DefaultRouter
 
@@ -19,7 +19,7 @@ urlpatterns = [
     path('register/client/', RegisterClientView.as_view(), name='register-client'),
     path('register/organisateur/', RegisterOrganisateurView.as_view(), name='register-organisateur'),
     path('register/admin/', RegisterAdminView.as_view(), name='register-admin'),
-    path('profil/', UserProfileView.as_view(), name='user-profile'),
+    path('profil/', UserProfileAPIView.as_view(), name='user-profile'),
     path('me/', UserDetailView.as_view(), name='user-detail'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),    
 ]

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 
 ]
 
@@ -99,6 +100,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+LOGIN_URL = '/api/login/'  # ou la route que tu utilises pour te connecter
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

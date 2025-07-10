@@ -147,7 +147,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # views.py
 from rest_framework import generics, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import PublicUserCreateSerializer, PublicUserUpdateSerializer, UserDetailSerializer, PasswordChangeSerializer
 from django.contrib.auth import get_user_model
 
@@ -174,21 +174,19 @@ class RegisterAdminView(generics.CreateAPIView):
     def get_serializer_context(self):
         return {'user_type': 'A'}
 
-from pprint import pprint
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = PublicUserUpdateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+class UserProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        user = self.request.user
-        pprint({
-            "type": str(type(user)),
-            "user": str(user),
-            "id": getattr(user, 'id', None),
-            "authenticated": user.is_authenticated,
-            "anonymous": user.is_anonymous,
-        })
-        return user
+    def get(self, request):
+        serializer = PublicUserUpdateSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = PublicUserUpdateSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserDetailSerializer
