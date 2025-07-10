@@ -146,9 +146,9 @@ class UserViewSet(viewsets.ModelViewSet):
     
 
 # views.py
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny
-from .serializers import PublicUserCreateSerializer
+from .serializers import PublicUserCreateSerializer, PublicUserUpdateSerializer, UserDetailSerializer, PasswordChangeSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -173,3 +173,43 @@ class RegisterAdminView(generics.CreateAPIView):
 
     def get_serializer_context(self):
         return {'user_type': 'A'}
+
+from pprint import pprint
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = PublicUserUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        pprint({
+            "type": str(type(user)),
+            "user": str(user),
+            "id": getattr(user, 'id', None),
+            "authenticated": user.is_authenticated,
+            "anonymous": user.is_anonymous,
+        })
+        return user
+    
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        user = self.get_object()
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({'detail': 'Mot de passe modifié avec succès.'}, status=status.HTTP_200_OK)

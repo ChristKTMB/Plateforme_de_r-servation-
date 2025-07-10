@@ -67,3 +67,22 @@ class PublicUserCreateSerializer(serializers.ModelSerializer):
         )
         return user
     
+class PublicUserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone', 'profile_picture']
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'user_type', 'phone', 'profile_picture', 'date_joined']
+        
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=8)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Ancien mot de passe incorrect.")
+        return value
